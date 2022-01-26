@@ -22,4 +22,5 @@ Class RabbitQueueSender extends RabbitQueue{
         $amqp_message = new AMQPMessage($message);
         $this->channel->basic_publish($amqp_message, self::queue_exchange, $routing_key);
     }
+    
 }

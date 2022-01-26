@@ -75,7 +75,7 @@ class Main extends Command{
             print "The connection has closed unexpectedly \n";
         }
     }
-    
+
     /**
      * Creates a consumer application that polls the RabbitMQ queue
      */

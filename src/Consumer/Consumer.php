@@ -10,7 +10,7 @@ use App\RabbitQueue\RabbitQueueReceiver;
 class Consumer{
    
     private $rabbit_queue_receiver;
-    
+
     public function __construct($em){
         $this->rabbit_queue_receiver = new RabbitQueueReceiver($em);
     }

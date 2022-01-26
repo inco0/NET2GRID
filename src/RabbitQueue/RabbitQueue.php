@@ -21,7 +21,7 @@ Class RabbitQueue{
     
     public function __construct(){
         //Set heartbeat to 60 seconds so that the connection does not get dropped
-        $this->connection = new AMQPStreamConnection(self::queue_hostname, self::queue_port, self::queue_username, self::queue_password, "/", false, "AMQPLAIN", null, "en_US", 3.0, 3.0, null, false, 30);
+        $this->connection = new AMQPStreamConnection(self::queue_hostname, self::queue_port, self::queue_username, self::queue_password, "/", false, "AMQPLAIN", null, "en_US", 3.0, 3.0, null, false, 60);
         $this->channel = $this->connection->channel();
         $queue_info_array = $this->channel->queue_declare(self::queue_queue, true);
         $this->n_of_consumers = $queue_info_array[2] + 1;
@@ -30,5 +30,28 @@ Class RabbitQueue{
     public function __destruct(){
         $this->channel->close();
         $this->connection->close();
+    }
+    
+    /**
+     * @return int The amount of consumer applications running
+     */
+    public function getConsumers(): int{
+        return $this->n_of_consumers;
+    }
+    
+    /**
+     * 
+     * @return AMQP Connection
+     */
+    public function getConnection(){
+        return $this->connection;
+    }
+    
+    /**
+     * 
+     * @return AMQP Channel
+     */
+    public function getChannel(){
+        return $this->channel;
     }
 }

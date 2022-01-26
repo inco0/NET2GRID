@@ -29,7 +29,7 @@ Class Producer{
      */
     public function produce($io): void{
         while (true){
-            $n_of_messages = $this->input($io);
+            $n_of_messages = $this->readInput($io);
             for ($i = 0; $i < $n_of_messages; $i++){
                 $message_array = $this->produceMessage();
 
@@ -41,7 +41,7 @@ Class Producer{
                 $timestamp = Helper::getTimestamp($message);
 
                 $io->text("Pushing message " . $i+1 . " with value $value and timestamp $timestamp to the queue");
-                sleep(5);
+                //sleep(5);
             }
             $ending_s = $n_of_messages == 1 ? "" : "s";
             $io->success("$n_of_messages message" . $ending_s .  " succesfully inserted in the queue.");
@@ -75,7 +75,7 @@ Class Producer{
      * @param type $io
      * @return int The amount of messages
      */
-    private function input($io): int{
+    private function readInput($io): int{
         $number = function ($amount){
             try{
                 if (!is_numeric($amount)){
