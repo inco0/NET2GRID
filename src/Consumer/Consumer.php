@@ -11,11 +11,20 @@ class Consumer{
    
     private $rabbit_queue_receiver;
     
+    /**
+     * 
+     * @param type $em
+     */
     public function __construct($em){
         $this->rabbit_queue_receiver = new RabbitQueueReceiver($em);
     }
     
-    public function informConsumers($io): void{
+    /**
+     * 
+     * @param type $io
+     * @return void
+     */
+    public function informConsumer($io): void{
         $amount_of_consumers = $this->rabbit_queue_receiver->getConsumers();
         if ($amount_of_consumers == 1){
             $io->title("You are currently the only consumer! Enjoy it while it lasts.");
@@ -30,11 +39,11 @@ class Consumer{
     }
     
     /**
-     * 
+     * Calls the asynchronous RabbitMQ function that polls the queue 
      * @return void
      */
-    public function consumeQueue(): void{
-        print $this->rabbit_queue_receiver->receive();
+    public function consumeQueue(){
+        $this->rabbit_queue_receiver->receive();
     }
 }
 

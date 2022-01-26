@@ -20,3 +20,13 @@ Assignment project of NET2GRID for platform engineer in PHP using symfony and do
 # CLASS STRUCTURE
 
 ![alt text](https://i.imgur.com/NrhXssg.png)
+
+# DATABASE SCHEME
+
+| id(int) | value(int) | timestamp(varchar) | queue_name(varchar) |
+|---------|------------|--------------------|---------------------|
+
+- **id :** An ascending unique id integer
+- **value :** The value field of the API
+- **timestamp :** The timestamp saved as a string since PHP only supports 32 bit integers and it overflows
+- **queue_name :** The name of the queue the message was polled from, only one exists in this particular example

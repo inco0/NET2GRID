@@ -4,32 +4,32 @@ namespace App\Producer;
 
 use App\Utilities\Helper;
 use App\RabbitQueue\RabbitQueueSender;
-use Symfony\Component\Console\Exception\RuntimeException;
 
 /**
-* Takes input from the user, produces messages and pushes them to the queue
+* Produces messages and pushes them to the queue every few seconds
 */
 Class Producer{
     
     private $api_reader;
     private $hostname;
     private $rabbit_queue_sender;
-    private const interval = 30;
+    private $interval;
 
     public function __construct(){
             $this->api_reader = new APIReader();
-            $this->hostname = Helper::hostname;
+            $this->hostname = Helper::getHostname();
             $this->rabbit_queue_sender = new RabbitQueueSender();
+            $this->interval = 10;
     }
     
     /**
-     * Main function that produces messages and pushes them in the queue
+     * Main function that produces messages and pushes them in the queue every few seconds
      * @param type $io
      * @return void
      */
     public function produce($io): void{
         $channel = $this->rabbit_queue_sender->getChannel();
-        $io->title("Pushing messages to the queue every " . self::interval . " seconds. Press CTRL+C to stop the program.");
+        $io->title("Pushing messages to the queue every " . $this->interval . " seconds. Press CTRL+C to stop the program.");
         while ($channel->is_open()){
             $message_array = $this->produceMessage();
 
@@ -41,17 +41,18 @@ Class Producer{
             $timestamp = Helper::getTimestamp($message);
 
             $io->success("Pushing message with value $value and timestamp $timestamp to the queue");
-            sleep(self::interval);
+            sleep($this->interval);
         }
     }
     
     /**
-     * Reads from the api and creates an array with the value and timestamp as body message and the routing key
-     * @return array  An associative array ["message" => value.timestamp, "routing_key" => routingkey]
+     * Reads from the API and creates an array containing the value, the timestamp and the converted routing key
+     * @return array  An associative array ["message" => value.timestamp, "routing_key" => routing_key]
      */
     private function produceMessage(): array{
         $api_associative_array = $this->api_reader->readAPI($this->hostname);
         $routing_key = Helper::getRoutingKey($api_associative_array);
+        
         $message = $api_associative_array["value"] . "." . $api_associative_array["timestamp"];
         $message_array = ["message" => $message, "routing_key" => $routing_key];
         return $message_array;
@@ -67,4 +68,3 @@ Class Producer{
         $this->rabbit_queue_sender->send($message, $routing_key);
     }
 }
-	

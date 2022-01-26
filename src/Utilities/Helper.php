@@ -3,17 +3,18 @@
 namespace App\Utilities;
 
 /**
-A static helper class that has some constants and helpful functions used across the project.
+A static helper class that has some constants and helpful functions used across the project
 */
 Class Helper{
-    const hostname = 'https://a831bqiv1d.execute-api.eu-west-1.amazonaws.com/dev/results';
+    
+    private const hostname = 'https://a831bqiv1d.execute-api.eu-west-1.amazonaws.com/dev/results';
     
     /**
-     * Uses the gmp library as the converted gatewayEui value is over 32 bits and it overflows
-     * @param type $hex_str The hexadecimal string
-     * @return string The string converted into decimal
+     * Uses the GMP library as the converted gatewayEui value is over 32 bits and it overflows
+     * @param string $hex_str The hexadecimal string
+     * @return string The $hex_string converted into decimal form
      */
-    private static function convertHexToDec($hex_str): string{
+    private static function convertHexToDec(string $hex_str): string{
         $dec_value = gmp_init($hex_str);
         return gmp_strval($dec_value);
     }
@@ -35,7 +36,7 @@ Class Helper{
     }*/
     
     /**
-     * Converts the attributes to decimal and concatenates them 
+     * Converts some members of the parameter array to decimal and concatenates them 
      * @param array $hex_api_assoc_array An associative array with the attribute names as keys and their respective hexadecimal value
      * @return string The valid routing key after every attribute has been converted to decimal and concatenated
      */
@@ -50,13 +51,28 @@ Class Helper{
             return $routing_key;
     }
     
+     /**
+     * @param string $message A "value"."timestamp" string
+     * @return string The value part of the parameter
+     */
     public static function getValue(string $message): string{
         list($value, $timestamp) = explode(".", $message, 2);
         return $value;
     }
     
+    /**
+     * @param string $message A "value"."timestamp" string
+     * @return string The timestamp part of the parameter
+     */
     public static function getTimestamp(string $message): string{
         list($value, $timestamp) = explode(".", $message, 2);
         return $timestamp;
+    }
+    
+    /**
+     * @return string The hostname where the API resides
+     */
+    public static function getHostname(): string{
+        return self::hostname;
     }
 }

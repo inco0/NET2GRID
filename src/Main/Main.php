@@ -15,25 +15,28 @@ use App\Producer\Producer;
 use App\Consumer\Consumer;
 
 /**
- * The starting point of the project executed when running the appropriate console command
+ * The starting point of the project, runs with a console command configures and produces either a consumer or a producer
 */
 class Main extends Command{
     
     private $io;
     private $entity_manager;
 
-    public function __construct(ManagerRegistry $mr){	
+    /**
+     * @param ManagerRegistry $mr Uses autowiring to create a ManagerRegistry object
+     */
+    public function __construct(ManagerRegistry $manager_registry){	
         parent::__construct();
-        $this->entity_manager = $mr->getManager();
+        $this->entity_manager = $manager_registry->getManager(); // The entity manager that will be used to store objects in the database
     }
     
     /**
-     * Configures the console command with the argument and its name
+     * Configures a console command with a name and an argument to be passed 
      * @return void
      */
     protected function configure(): void{
         $this->setName('app:start')
-            ->setDescription('Starts the application')
+            ->setDescription('Starts the application.')
             ->addArgument('type', InputArgument::REQUIRED, 'Run the application as a producer or a consumer.');
     }
     
@@ -42,7 +45,7 @@ class Main extends Command{
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
-     * @throws RunTimeException when argument name is not "producer" or "consumer"
+     * @throws RunTimeException When the argument passed is neither a "producer" mor "consumer"
      */
     protected function execute(InputInterface $input, OutputInterface $output): int{
         $type = $input->getArgument('type');
@@ -64,7 +67,7 @@ class Main extends Command{
     }
     
     /**
-     * Creates a producer application that is responsible for pushing messages on the queue
+     * Creates a producer application that is responsible for pushing messages in the queue
      */
     private function startProducer(): void{
         $producer = new Producer();
@@ -81,7 +84,7 @@ class Main extends Command{
      */
     private function startConsumer(): void{
         $consumer = new Consumer($this->entity_manager);
-        $consumer->informConsumers($this->io);
+        $consumer->informConsumer($this->io);
         try{
             $consumer->consumeQueue();
         }
