@@ -51,11 +51,4 @@ Class RabbitQueueReceiver extends RabbitQueue{
             $this->channel->wait();
         }
     }
-    
-    /**
-     * @return int The amount of consumer applications running
-     */
-    public function getConsumers(): int{
-        return $this->n_of_consumers;
-    }
 }
