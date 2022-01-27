@@ -7,8 +7,10 @@ Assignment project of NET2GRID for platform engineer in PHP using symfony and do
 [PHP 8.0](https://www.php.net/)
 
 ## INSTALLATION
-`$ composer update` if required
+`$ composer update`
+
 `$ composer install`
+
 Make sure the following extensions are installed and uncommented from php.ini
  - curl
  - fileinfo
