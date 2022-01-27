@@ -30,9 +30,6 @@ Class RabbitQueue{
         $this->n_of_consumers = $queue_info_array[2] + 1; // The amount of consumers that were concurrently running at the point of creation
     }
     
-    /**
-     * Closes the AMQP connection and channel
-     */
     public function __destruct(){
         $this->channel->close();
         $this->connection->close();

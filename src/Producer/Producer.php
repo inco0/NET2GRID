@@ -6,7 +6,7 @@ use App\Utilities\Helper;
 use App\RabbitQueue\RabbitQueueSender;
 
 /**
-* Produces messages and pushes them to the queue every few seconds
+* Produces messages and pushes them in the queue every few seconds
 */
 Class Producer{
     
@@ -25,16 +25,15 @@ Class Producer{
     /**
      * Main function that produces messages and pushes them in the queue every few seconds
      * @param type $io
-     * @return void
      */
     public function produce($io): void{
         $channel = $this->rabbit_queue_sender->getChannel();
         $io->title("Pushing messages to the queue every " . $this->interval . " seconds. Press CTRL+C to stop the program.");
         while ($channel->is_open()){
-            $message_array = $this->produceMessage();
+            $api_array = $this->produceMessage();
 
-            $message = $message_array["message"];
-            $routing_key = $message_array["routing_key"];
+            $message = $api_array["message"];
+            $routing_key = $api_array["routing_key"];
             $this->pushToQueue($message, $routing_key);
 
             $value = Helper::getValue($message);
@@ -46,23 +45,21 @@ Class Producer{
     }
     
     /**
-     * Reads from the API and creates an array containing the value, the timestamp and the converted routing key
-     * @return array  An associative array ["message" => value.timestamp, "routing_key" => routing_key]
+     * Reads from the API and creates an array containing the value, the timestamp and the converted to decimal routing key
+     * @return array  An associative array with the following structure ["message" => value.timestamp, "routing_key" => routing_key]
      */
     private function produceMessage(): array{
         $api_associative_array = $this->api_reader->readAPI($this->hostname);
         $routing_key = Helper::getRoutingKey($api_associative_array);
-        
         $message = $api_associative_array["value"] . "." . $api_associative_array["timestamp"];
-        $message_array = ["message" => $message, "routing_key" => $routing_key];
-        return $message_array;
+        $api_array = ["message" => $message, "routing_key" => $routing_key];
+        return $api_array;
     }
     
     /**
-     * Uses the rabbit sender to push a message on the queue
+     * Uses the rabbit sender to push a message in the queue
      * @param string $message
      * @param string $routing_key
-     * @return void
      */
     private function pushToQueue(string $message, string $routing_key): void{
         $this->rabbit_queue_sender->send($message, $routing_key);

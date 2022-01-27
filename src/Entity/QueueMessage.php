@@ -28,13 +28,11 @@ class QueueMessage
     private $timestamp;
 
     /**
-     * 
      * @ORM\Column(type="string")
      */
     private $queue_name;
     
     /**
-     * 
      * @return int|null
      */
     public function getId(): ?int{
@@ -42,7 +40,6 @@ class QueueMessage
     }
     
     /**
-     * 
      * @return int|null
      */
     public function getValue(): ?int{
@@ -50,7 +47,6 @@ class QueueMessage
     }
     
     /**
-     * 
      * @param int $value
      * @return self
      */
@@ -60,7 +56,6 @@ class QueueMessage
     }
     
     /**
-     * 
      * @return string|null
      */
     public function getTimestamp(): ?string{
@@ -68,7 +63,6 @@ class QueueMessage
     }
     
     /**
-     * 
      * @param string $timestamp
      * @return self
      */
@@ -78,7 +72,6 @@ class QueueMessage
     }
     
     /**
-     * 
      * @return string|null
      */
     public function getQueueName(): ?string{
@@ -86,7 +79,6 @@ class QueueMessage
     }
     
     /**
-     * 
      * @param string $queue_name
      * @return self
      */

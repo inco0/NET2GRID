@@ -13,9 +13,9 @@ Class APIReader{
         }
        
     /**
-     * Reads from an api and returns its content
+     * Reads from a url and returns its content in an array
      * @param string $hostname The url of the api
-     * @return An associative array equivalent to the json object found in the url
+     * @return array An associative array equivalent to the json object found in the url
      */
     public function readAPI(string $hostname): array{
         try{

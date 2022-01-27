@@ -5,24 +5,19 @@ namespace App\Consumer;
 use App\RabbitQueue\RabbitQueueReceiver;
 
 /**
-
+    Uses a RabbitQueueReceiver to poll the queue for messages
 */
 class Consumer{
    
     private $rabbit_queue_receiver;
     
-    /**
-     * 
-     * @param type $em
-     */
     public function __construct($em){
         $this->rabbit_queue_receiver = new RabbitQueueReceiver($em);
     }
     
     /**
-     * 
+     * Informs the consumer how many other consumers are currently running the application
      * @param type $io
-     * @return void
      */
     public function informConsumer($io): void{
         $amount_of_consumers = $this->rabbit_queue_receiver->getConsumers();
@@ -38,10 +33,6 @@ class Consumer{
         }
     }
     
-    /**
-     * Calls the asynchronous RabbitMQ function that polls the queue 
-     * @return void
-     */
     public function consumeQueue(){
         $this->rabbit_queue_receiver->receive();
     }

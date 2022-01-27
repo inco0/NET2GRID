@@ -21,18 +21,18 @@ Class Helper{
     
     /* Manual method
     public static function convertHexToDec($hex_str): string{
-            $dec_value = gmp_init(0);
-            $length = strlen($hex_str);
-            for ($i = $length - 1; $i >= 0; $i--){
-                    $ascii_code = ord($hex_str[$i]);
-                    if ($ascii_code >= 97)
-                            $hex_value = 10 + $ascii_code - 97;
-                    else
-                            $hex_value = 0 + $ascii_code - 48;
-                    $base_exponent_mul = gmp_mul($hex_value, gmp_pow(16, $length - 1 - $i));
-                    $dec_value = gmp_add($dec_value, $base_exponent_mul);
-            }
-            return gmp_strval($dec_value);
+        $dec_value = gmp_init(0);
+        $length = strlen($hex_str);
+        for ($i = $length - 1; $i >= 0; $i--){
+                $ascii_code = ord($hex_str[$i]);
+                if ($ascii_code >= 97)
+                        $hex_value = 10 + $ascii_code - 97;
+                else
+                        $hex_value = 0 + $ascii_code - 48;
+                $base_exponent_mul = gmp_mul($hex_value, gmp_pow(16, $length - 1 - $i));
+                $dec_value = gmp_add($dec_value, $base_exponent_mul);
+        }
+        return gmp_strval($dec_value);
     }*/
     
     /**
@@ -41,14 +41,16 @@ Class Helper{
      * @return string The valid routing key after every attribute has been converted to decimal and concatenated
      */
     public static function getRoutingKey(array $hex_api_assoc_array): string{
-            $members_to_convert = array("gatewayEui", "profileId", "endpointId", "clusterId", "attributeId");
-            $new_gateway_hex = "0x" . $hex_api_assoc_array["gatewayEui"];
-            $routing_key = self::convertHexToDec($new_gateway_hex); 
-            for ($i = 1; $i < sizeof($members_to_convert); $i++){
-                $member = $members_to_convert[$i];
-                $routing_key = $routing_key . "." . self::convertHexToDec($hex_api_assoc_array[$member]);
-            }
-            return $routing_key;
+        $members_to_convert = array("gatewayEui", "profileId", "endpointId", "clusterId", "attributeId");
+        $new_gateway_hex = "0x" . $hex_api_assoc_array["gatewayEui"];
+        $routing_key = self::convertHexToDec($new_gateway_hex); 
+
+        for ($i = 1; $i < sizeof($members_to_convert); $i++){
+            $member = $members_to_convert[$i];
+            $hex_string = $hex_api_assoc_array[$member];
+            $routing_key = $routing_key . "." . self::convertHexToDec($hex_string);
+        }
+        return $routing_key;
     }
     
      /**

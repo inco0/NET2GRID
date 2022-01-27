@@ -23,7 +23,7 @@ class Main extends Command{
     private $entity_manager;
 
     /**
-     * @param ManagerRegistry $mr Uses autowiring to create a ManagerRegistry object
+     * @param ManagerRegistry $manager_registry Uses autowiring to create a ManagerRegistry object
      */
     public function __construct(ManagerRegistry $manager_registry){	
         parent::__construct();
@@ -31,7 +31,7 @@ class Main extends Command{
     }
     
     /**
-     * Configures a console command with a name and an argument to be passed 
+     * Configures a console command with a name and an argument that needs to be passed
      * @return void
      */
     protected function configure(): void{
@@ -41,11 +41,11 @@ class Main extends Command{
     }
     
     /**
-     * Runs when the console command of the configuration is executed and creates either a producer or a consumer
+     * Runs when the console command of the configuration is executed and calls the corresponding function
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
-     * @throws RunTimeException When the argument passed is neither a "producer" mor "consumer"
+     * @throws RunTimeException When the argument passed is neither a "producer" nor "consumer"
      */
     protected function execute(InputInterface $input, OutputInterface $output): int{
         $type = $input->getArgument('type');
