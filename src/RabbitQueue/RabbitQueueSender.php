@@ -18,8 +18,9 @@ Class RabbitQueueSender extends RabbitQueue{
      * @param string $message The message to be pushed with the structure "value"."timestamp"
      * @param string $routing_key The routing key in decimal form
      */
-    public function send(string $message, string $routing_key){
+    public function send(string $message, string $routing_key){ 
         $amqp_message = new AMQPMessage($message);
+        $this->channel->queue_bind(self::queue_queue, self::queue_exchange, $routing_key);
         $this->channel->basic_publish($amqp_message, self::queue_exchange, $routing_key);
     }
 }
